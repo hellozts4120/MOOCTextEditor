@@ -5,6 +5,7 @@ package document;
  * @author UC San Diego Intermediate Programming MOOC team
  */
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,10 +51,30 @@ public abstract class Document {
 	// next week when we implement the EfficientDocument class.
 	protected int countSyllables(String word)
 	{
-		// TODO: Implement this method so that you can call it from the 
-	    // getNumSyllables method in BasicDocument (module 1) and 
-	    // EfficientDocument (module 2).
-	    return 0;
+		int count = 0;
+		String pattern = "[aeiouyAEIOUY]+";
+		Pattern tokSplitter = Pattern.compile(pattern);
+		Matcher m = tokSplitter.matcher(word);
+		
+		String last = "";
+		String second = "";
+		
+		String[] vowel = {"a", "e", "i", "o", "u", "y"};
+		List<String> lists = Arrays.asList(vowel);
+		while (m.find()) {
+			count++;
+			if(m.group().toLowerCase().equals("e")){
+				second = last;
+			}
+			last = m.group().toLowerCase();
+		}
+		
+		if(count > 1 && word.charAt(word.length() - 1) == 'e' && last.equals("e") &&
+				!second.isEmpty() && lists.contains(second)){
+			count--;
+		}
+		
+	    return count;
 	}
 	
 	/** A method for testing
@@ -116,8 +137,14 @@ public abstract class Document {
 	/** return the Flesch readability score of this document */
 	public double getFleschScore()
 	{
-	    // TODO: Implement this method
-	    return 0.0;
+	    double words = (double)getNumWords();
+	    double sentences = (double)getNumSentences();
+	    double syllables = (double)getNumSyllables();
+	    double FleschScore = 206.835 - 1.015 * (words / sentences) - 
+	    		(syllables / words);
+	    
+	    FleschScore = Math.round(FleschScore * 100.0) / 100.0;
+	    return FleschScore;
 	}
 	
 	
