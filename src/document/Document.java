@@ -141,7 +141,7 @@ public abstract class Document {
 	    double sentences = (double)getNumSentences();
 	    double syllables = (double)getNumSyllables();
 	    double FleschScore = 206.835 - 1.015 * (words / sentences) - 
-	    		(syllables / words);
+	    		84.6* (syllables / words);
 	    
 	    FleschScore = Math.round(FleschScore * 100.0) / 100.0;
 	    return FleschScore;
