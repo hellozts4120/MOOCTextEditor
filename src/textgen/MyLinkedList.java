@@ -17,6 +17,10 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	/** Create a new empty LinkedList */
 	public MyLinkedList() {
 		// TODO: Implement this method
+		head = new LLNode<E>(null);
+		tail = new LLNode<E>(null);
+		head.next = tail;
+		tail.prev = head;
 	}
 
 	/**
@@ -26,7 +30,8 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public boolean add(E element ) 
 	{
 		// TODO: Implement this method
-		return false;
+		add(size, element);
+		return true;
 	}
 
 	/** Get the element at position index 
@@ -34,7 +39,23 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E get(int index) 
 	{
 		// TODO: Implement this method.
-		return null;
+		LLNode<E> temp = new LLNode<E>(null);
+		if(index < 0){
+			throw new IndexOutOfBoundsException("Provided index is lesser than 0");
+		}
+		else if(index >= size){
+			throw new IndexOutOfBoundsException("Provided index is larger than the number of elements in the List");
+		}
+		else{
+			temp = head;
+			for(int i = 0; i <= index; i++){
+				temp = temp.next;
+				if(temp == null){
+					throw new NullPointerException("Provided index is wrong, no such index!");
+				}
+			}
+		}
+		return temp.data;
 	}
 
 	/**
@@ -45,6 +66,26 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public void add(int index, E element ) 
 	{
 		// TODO: Implement this method
+		if(index < 0){
+			throw new IndexOutOfBoundsException("Provided index is lesser than 0");
+		}
+		else if(index > size){
+			throw new IndexOutOfBoundsException("Provided index is larger than the number of elements in the List");
+		}
+		else if(element == null){
+			throw new NullPointerException("Provided element value is null");
+		}
+		else{
+			LLNode<E> temp = head;
+			for(int i = 0; i < index; i++){
+				temp = temp.next;
+				if(temp == null){
+					throw new NullPointerException("Provided index is wrong, no such index!");
+				}
+			}
+			LLNode<E> newNode = new LLNode(element, temp);
+			size++;
+		}
 	}
 
 
@@ -52,7 +93,7 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public int size() 
 	{
 		// TODO: Implement this method
-		return -1;
+		return size;
 	}
 
 	/** Remove a node at the specified index and return its data element.
@@ -64,7 +105,29 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E remove(int index) 
 	{
 		// TODO: Implement this method
-		return null;
+		if(index < 0){
+			throw new IndexOutOfBoundsException("Provided index is lesser than 0");
+		}
+		else if(index > size){
+			throw new IndexOutOfBoundsException("Provided index is larger than the number of elements in the List");
+		}
+		else{
+			LLNode<E> temp = head;
+			for(int i = 0; i <= index; i++){
+				temp = temp.next;
+				if(temp == null){
+					throw new NullPointerException("Provided index is wrong, no such index!");
+				}
+			}
+			if(temp == null){
+				throw new NullPointerException("Provided index is wrong, no such index!");
+			}
+			E ReturnData = temp.data;
+			temp.prev.next = temp.next;
+			temp.next.prev = temp.prev;
+			size--;
+			return ReturnData;
+		}
 	}
 
 	/**
@@ -77,7 +140,27 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E set(int index, E element) 
 	{
 		// TODO: Implement this method
-		return null;
+		if(index < 0){
+			throw new IndexOutOfBoundsException("Provided index is lesser than 0");
+		}
+		else if(index > size){
+			throw new IndexOutOfBoundsException("Provided index is larger than the number of elements in the List");
+		}
+		else if(element == null){
+			throw new NullPointerException("Provided element value is null");
+		}
+		else{
+			LLNode<E> temp = head;
+			for(int i = 0; i < index; i++){
+				temp = temp.next;
+				if(temp == null){
+					throw new NullPointerException("Provided index is wrong, no such index!");
+				}
+			}
+			E ReturnData = temp.next.data;
+			temp.next.data = element;
+			return ReturnData;
+		}
 	}   
 }
 
@@ -97,4 +180,11 @@ class LLNode<E>
 		this.next = null;
 	}
 
+	public LLNode(E e, LLNode<E> temp){
+		this(e);
+		this.prev = temp;
+		this.next = temp.next;
+		temp.next.prev = this;
+		temp.next = this;
+	}
 }
