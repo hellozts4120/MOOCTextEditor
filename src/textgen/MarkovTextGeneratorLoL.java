@@ -55,13 +55,13 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	    // TODO: Implement this method
 		
 		if(wordList.isEmpty()){
-			return null;
+			return "";
 		}
 		starter = "";
 		String OutPut = "";
 		while(GetSourceArray(OutPut).length < numWords){
 			ListNode temp;
-			if(FindWord(starter) >= 0){
+			if(FindWord(starter) > 0){
 				temp = wordList.get(FindWord(starter));
 			}
 			else{
@@ -92,7 +92,8 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	{
 		// TODO: Implement this method.
 		
-		wordList.clear();
+		wordList = new LinkedList<ListNode>();
+		starter = "";
 		train(sourceText);
 	}
 	
