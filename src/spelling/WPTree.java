@@ -27,9 +27,9 @@ public class WPTree implements WordPath {
 	public WPTree () {
 		this.root = null;
 		// TODO initialize a NearbyWords object
-		// Dictionary d = new DictionaryHashSet();
-		// DictionaryLoader.loadDictionary(d, "data/dict.txt");
-		// this.nw = new NearbyWords(d);
+		Dictionary d = new DictionaryHashSet();
+		DictionaryLoader.loadDictionary(d, "data/dict.txt");
+		this.nw = new NearbyWords(d);
 	}
 	
 	//This constructor will be used by the grader code
@@ -42,6 +42,30 @@ public class WPTree implements WordPath {
 	public List<String> findPath(String word1, String word2) 
 	{
 	    // TODO: Implement this method.
+		HashSet<String> visited = new HashSet<String>();
+		List<WPTreeNode> queue = new LinkedList<WPTreeNode>();
+		root = new WPTreeNode(word1, null);
+		visited.add(word1);
+		queue.add(root);
+		WPTreeNode cur;
+		
+		while(!queue.isEmpty() && !visited.contains(word2) && queue.size()<1000){
+			cur = queue.remove(0);
+			if(!visited.contains(cur.getWord())){
+				visited.add(cur.getWord());
+				if(cur.getWord().equals(word2)){
+					return cur.buildPathToRoot();
+				}
+			}
+			List<String> NearByWords = nw.distanceOne(cur.getWord(), true);
+			for(String s : NearByWords){
+				if(!visited.contains(s)){
+					WPTreeNode temp = new WPTreeNode(s, cur);
+					cur.addChild(s);
+					queue.add(temp);
+				}
+			}
+		}
 	    return new LinkedList<String>();
 	}
 	
